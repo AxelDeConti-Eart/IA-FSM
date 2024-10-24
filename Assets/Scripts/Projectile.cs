@@ -1,9 +1,11 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Movement))]
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private Movement _movement = null;
     [SerializeField] private float _deathTime = 1f;
+    [SerializeField] private int _damage = 1;
 
     private Vector2 _direction = Vector2.zero;
     private string _tagToCheck = string.Empty;
@@ -23,7 +25,7 @@ public class Projectile : MonoBehaviour
 
     private void DestroyProjecile()
     {
-        if(gameObject != null)
+        if (gameObject != null)
             Destroy(gameObject);
     }
 
@@ -31,8 +33,19 @@ public class Projectile : MonoBehaviour
     {
         if (collision.collider.tag == _tagToCheck)
         {
-            //End game
-            Debug.Log("End game");
+            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                //Damage the collider
+                damageable.Damage(_damage);
+                DestroyProjecile();
+            }
         }
+    }
+
+    private void OnValidate()
+    {
+        if (_movement == null)
+            _movement = GetComponent<Movement>();
     }
 }

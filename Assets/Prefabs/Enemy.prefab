@@ -51,6 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fsm: {fileID: 2440533976300725171}
   _movement: {fileID: 863810105150252865}
+  _spriteRenderer: {fileID: 4009323699509615467}
 --- !u!114 &863810105150252865
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,18 +1,22 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamageable
 {
     public static Player Instance { get; private set; }
 
     [SerializeField] private Movement _movement = null;
 
+    [SerializeField] private int _maxHealth = 4;
     [SerializeField] private float _stunDelay = 2;
 
     private float _currentStunTimer = -1;
+    private int _currentHealth = 0;
 
     private void Start()
     {
         Instance = this;
+        _currentHealth = _maxHealth;
     }
 
     private void Update()
@@ -49,5 +53,17 @@ public class Player : MonoBehaviour
         _currentStunTimer = _stunDelay;
     }
 
-    public bool CanStun => _currentStunTimer > 0;
+    public void Damage(int value)
+    {
+        _currentHealth -= value;
+        if (_currentHealth <= 0)
+        {
+            //End game
+            SceneManager.LoadScene(0);
+        }
+    }
+
+    public bool CanStun => _currentStunTimer < 0;
+    public int MaxHealth => _maxHealth;
+    public int CurrentHealth => _currentHealth;
 }
